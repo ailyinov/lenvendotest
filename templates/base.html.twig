@@ -8,6 +8,10 @@
     <body>
         {% block body %}
             {{ sup }}
+            <form action="{{ path('bookmarks') }}" method="post">
+                <input type="text" name="url" id="url"/>
+                <input type="submit" value="Add"/>
+            </form>
         {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
