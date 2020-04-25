@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html>
-    <head>
+<body>
+{% block body %}
+    <form action="{{ path('bookmarks') }}" method="post">
+        <input type="text" name="url" id="url"/>
+        <input type="submit" value="Add"/>
+    </form>
+{% endblock %}
+
+
+{% block javascripts %}{% endblock %}
+</body>
+<head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
-    <body>
-        {% block body %}
-            {{ sup }}
-            <form action="{{ path('bookmarks') }}" method="post">
-                <input type="text" name="url" id="url"/>
-                <input type="submit" value="Add"/>
-            </form>
-        {% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
 </html>

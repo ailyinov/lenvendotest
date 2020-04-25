@@ -1,4 +1,9 @@
 bookmarks:
     path: /
+    controller: Lenvendo\Controller\BookmarkController::listAction
+    methods: GET
+
+bookmarks_add:
+    path: /add
     controller: Lenvendo\Controller\BookmarkController::addAction
     methods: GET|POST
