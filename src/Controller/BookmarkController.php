@@ -4,6 +4,7 @@
 namespace Lenvendo\Controller;
 
 
+use Lenvendo\Controller\Utils\PaginatorWIthSorting;
 use Lenvendo\Repository\BookmarkRepository;
 use Lenvendo\Service\Bookmark\BookmarkAdd;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,11 +22,24 @@ class BookmarkController extends AbstractController
         ]);
     }
 
-    public function listAction(BookmarkRepository $bookmarkRepository)
+    public function listAction(Request $request, BookmarkRepository $bookmarkRepository)
     {
-        $bookmarkRepository->findAll();
+        $paginator = new PaginatorWIthSorting($request);
+
+        $result = $bookmarkRepository->findSorted($paginator->getItemsPerPageCount(), $paginator->getOffset(), $paginator->getSortField(), $paginator->getOrder());
+        $paginator->setItemsCount($result->count());
+        $paginator->setItems($result);
+
         return $this->render('list.html.twig', [
-            'bookmarks' => $bookmarkRepository->findAll(),
+            'paginator' => $paginator,
         ]);
     }
+
+//    public function itemAction(Request $request)
+//    {
+//        $bookmarkId = $request->get('bookmark_id');
+//        return $this->render('list.html.twig', [
+////            'bookmarks' => $bookmarkRepository->findAll(),
+//        ]);
+//    }
 }

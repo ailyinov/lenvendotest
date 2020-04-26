@@ -6,11 +6,11 @@
         <thead>
         <tr>
             <th> url </th>
-            <th> title </th>
+            <th> <a href="{{ path('bookmarks', paginator.getQueryParams(null, 'title', paginator.toggleOrder)) }}"> title </a></th>
         </tr>
         </thead>
         <tbody>
-        {% for bookmark in bookmarks %}
+        {% for bookmark in paginator.getItems() %}
             <tr>
                 <td>
                     {{ bookmark.url }}
