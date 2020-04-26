@@ -17,7 +17,7 @@ class BookmarkController extends AbstractController
         if ($request->isMethod('post')) {
             $bookmarkAdd->run($request->get('url'));
         }
-        return $this->render('base.html.twig', [
+        return $this->render('add.html.twig', [
             'sup' => 'sup',
         ]);
     }

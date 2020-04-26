@@ -1,7 +1,6 @@
-<!DOCTYPE html>
-<html>
-<body>
-{% block body %}
+{% extends "base.html.twig" %}
+
+{% block content %}
     <ul>
         <li>{{ bookmark.title }}</li>
         <li>{{ bookmark.url }}</li>
@@ -14,13 +13,3 @@
         <input type="submit" value="Remove"/>
     </form>
 {% endblock %}
-
-
-{% block javascripts %}{% endblock %}
-</body>
-    <head>
-            <meta charset="UTF-8">
-            <title>{% block title %}bookmark.title{% endblock %}</title>
-            {% block stylesheets %}{% endblock %}
-    </head>
-</html>

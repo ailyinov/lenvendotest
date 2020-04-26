@@ -1,7 +1,6 @@
-<!DOCTYPE html>
-<html>
-<body>
-{% block body %}
+{% extends "base.html.twig" %}
+
+{% block content %}
     <table>
         <thead>
         <tr>
@@ -23,12 +22,3 @@
         </tbody>
     </table>
 {% endblock %}
-
-{% block javascripts %}{% endblock %}
-</body>
-<head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-</html>

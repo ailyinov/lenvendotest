@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <form action="{{ path('bookmarks') }}" method="post">
+        <input type="text" name="url" id="url"/>
+        <input type="submit" value="Add"/>
+        <input type="submit" value="Add"/>
+    </form>
+{% endblock %}
