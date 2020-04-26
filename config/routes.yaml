@@ -9,6 +9,6 @@ bookmarks_add:
     methods: GET|POST
 
 bookmark_item:
-    path: /add
-    controller: Lenvendo\Controller\BookmarkController::addAction
+    path: /bookmark/{bookmark_id}
+    controller: Lenvendo\Controller\BookmarkController::itemAction
     methods: GET|DELETE

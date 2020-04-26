@@ -35,11 +35,13 @@ class BookmarkController extends AbstractController
         ]);
     }
 
-//    public function itemAction(Request $request)
-//    {
-//        $bookmarkId = $request->get('bookmark_id');
-//        return $this->render('list.html.twig', [
-////            'bookmarks' => $bookmarkRepository->findAll(),
-//        ]);
-//    }
+    public function itemAction(Request $request, BookmarkRepository $bookmarkRepository)
+    {
+        $bookmarkId = $request->get('bookmark_id');
+        $bookmark = $bookmarkRepository->find($bookmarkId);
+
+        return $this->render('item.html.twig', [
+            'bookmark' => $bookmark,
+        ]);
+    }
 }
