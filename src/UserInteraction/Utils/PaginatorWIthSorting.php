@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Lenvendo\Controller\Utils;
+namespace Lenvendo\UserInteraction\Utils;
 
 
 use Symfony\Component\HttpFoundation\Request;

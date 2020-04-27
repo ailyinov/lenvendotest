@@ -1,21 +1,32 @@
 <?php
 
 
-namespace Lenvendo\Controller;
+namespace Lenvendo\UserInteraction\Controller;
 
 
-use Lenvendo\Controller\Utils\PaginatorWIthSorting;
+use Lenvendo\UserInteraction\RequestData\BookmarkData;
+use Lenvendo\UserInteraction\Utils\PaginatorWIthSorting;
 use Lenvendo\Repository\BookmarkRepository;
 use Lenvendo\Service\Bookmark\BookmarkAdd;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BookmarkController extends AbstractController
 {
-    public function addAction(Request $request, BookmarkAdd $bookmarkAdd)
+    public function addAction(Request $request, BookmarkAdd $bookmarkAdd, ValidatorInterface $validator)
     {
         if ($request->isMethod('post')) {
-            $bookmarkAdd->run($request->get('url'));
+            $submittedToken = $request->request->get('token');
+            if (!$this->isCsrfTokenValid('add-bookmark', $submittedToken)) {
+                $this->redirect($this->generateUrl('bookmarks'));
+            }
+            $url = $request->get('url');
+            $bookmarkData = new BookmarkData($url);
+            $errors =$validator->validate($bookmarkData);
+            if (count($errors) == 0) {
+                $bookmarkAdd->run($url);
+            }
         }
         return $this->render('add.html.twig', [
             'sup' => 'sup',

@@ -23,4 +23,9 @@ class BookmarkRepository extends ServiceEntityRepository
 
         return new Paginator($query);
     }
+
+    public function findOneByUrl(string $url): ?Bookmark
+    {
+        return $this->findOneBy(['url' => $url]);
+    }
 }

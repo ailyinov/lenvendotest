@@ -1,14 +1,14 @@
 bookmarks:
     path: /
-    controller: Lenvendo\Controller\BookmarkController::listAction
+    controller: Lenvendo\UserInteraction\Controller\BookmarkController::listAction
     methods: GET
 
-bookmarks_add:
+bookmark_add:
     path: /add
-    controller: Lenvendo\Controller\BookmarkController::addAction
+    controller: Lenvendo\UserInteraction\Controller\BookmarkController::addAction
     methods: GET|POST
 
 bookmark_item:
     path: /bookmark/{bookmark_id}
-    controller: Lenvendo\Controller\BookmarkController::itemAction
+    controller: Lenvendo\UserInteraction\Controller\BookmarkController::itemAction
     methods: GET|DELETE

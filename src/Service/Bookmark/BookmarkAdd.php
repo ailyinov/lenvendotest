@@ -6,6 +6,7 @@ namespace Lenvendo\Service\Bookmark;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Lenvendo\Entity\Bookmark;
+use Lenvendo\UserInteraction\RequestData\BookmarkData;
 
 class BookmarkAdd
 {
@@ -38,13 +39,13 @@ class BookmarkAdd
         $this->entityManager = $entityManager;
     }
 
-    public function run(string $url)
+    public function run(BookmarkData $bookmarkData)
     {
-        $bodyContent = $this->httpClient->request($url);
+        $bodyContent = $this->httpClient->request($bookmarkData->getUrl());
         $metadata = $this->responseParser->parseMeta($bodyContent);
 
         $bookmark = new Bookmark();
-        $bookmark->setUrl($url);
+        $bookmark->setUrl($bookmarkData->getUrl());
         $bookmark->setTitle($metadata['title'] ?? '');
         $bookmark->setDescription($metadata[ResponseParser::META_DESCRIPTION] ?? '');
         $bookmark->setKeywords($metadata[ResponseParser::META_KEYWORDS] ?? '');
