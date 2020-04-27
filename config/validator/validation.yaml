@@ -5,3 +5,4 @@ Lenvendo\UserInteraction\RequestData\BookmarkData:
               message: The url "{{ value }}" is not a valid url.
           - NotBlank: ~
           - Lenvendo\UserInteraction\Validator\Constraint\BookmarkUniqueUrl: ~
+          - Lenvendo\UserInteraction\Validator\Constraint\BookmarkValidResource: ~
