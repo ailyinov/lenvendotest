@@ -4,7 +4,9 @@
 namespace Lenvendo\UserInteraction\RequestData;
 
 
-class BookmarkData
+use Symfony\Component\HttpFoundation\Request;
+
+class BookmarkData implements RequestData
 {
     /**
      * @var string
@@ -42,5 +44,10 @@ class BookmarkData
     public function getPassword(): ?string
     {
         return $this->password;
+    }
+
+    public static function createFromRequest(Request $request)
+    {
+        return new self($request->get('url'), $request->get('password', null));
     }
 }

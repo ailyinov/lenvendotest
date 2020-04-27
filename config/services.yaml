@@ -28,3 +28,7 @@ services:
     Lenvendo\UserInteraction\Validator\:
         resource: '../src/UserInteraction/Validator'
         tags: ['validator.constraint_validator']
+
+    Lenvendo\ArgumentResolver\DataParamsResolver:
+        tags:
+            - { name: controller.argument_value_resolver, priority: 50 }

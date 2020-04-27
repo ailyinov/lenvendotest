@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Bookmark
  *
- * @ORM\Table(name="bookmark")
+ * @ORM\Table(name="bookmark", uniqueConstraints={@ORM\UniqueConstraint(name="bookmark_url_uindex", columns={"url"})})
  * @ORM\Entity
  */
 class Bookmark
@@ -71,12 +71,11 @@ class Bookmark
     private $dateCreated;
 
     /**
-     * Bookmark constructor.
+     * @var string|null
+     *
+     * @ORM\Column(name="password", type="string", length=255, nullable=true)
      */
-    public function __construct()
-    {
-        $this->setDateCreated(new \DateTime());
-    }
+    private $password;
 
     public function getId(): ?int
     {
@@ -167,5 +166,15 @@ class Bookmark
         return $this;
     }
 
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
 
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
 }

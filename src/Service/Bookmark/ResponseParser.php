@@ -45,7 +45,7 @@ class ResponseParser
     {
         $xml = simplexml_import_dom($doc);
         $arr = $xml->xpath('//link[@rel="shortcut icon"]');
-        $result['favicon'] = $arr[0]['href'];
+        $result['favicon'] = $arr[0]['href'] ?? '';
     }
 
     /**

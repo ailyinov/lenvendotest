@@ -14,14 +14,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BookmarkController extends AbstractController
 {
-    public function addAction(Request $request, BookmarkAdd $bookmarkAdd, ValidatorInterface $validator)
+    public function addAction(Request $request, BookmarkAdd $bookmarkAdd, ValidatorInterface $validator, BookmarkData $bookmarkData = null)
     {
         if ($request->isMethod('post')) {
-            $submittedToken = $request->request->get('token');
-            if (!$this->isCsrfTokenValid('add-bookmark', $submittedToken)) {
-                $this->redirect($this->generateUrl('bookmarks'));
-            }
-            $bookmarkData = new BookmarkData($request->get('url'), $request->get('password', null));
+            $this->validateCsrfToken('add-bookmark', $request->request->get('token'));
             $errors =$validator->validate($bookmarkData);
             if (count($errors) == 0) {
                 $bookmarkAdd->run($bookmarkData);
@@ -53,5 +49,16 @@ class BookmarkController extends AbstractController
         return $this->render('item.html.twig', [
             'bookmark' => $bookmark,
         ]);
+    }
+
+    /**
+     * @param string $id
+     * @param string $submittedToken
+     */
+    private function validateCsrfToken(string $id, string $submittedToken): void
+    {
+        if (!$this->isCsrfTokenValid($id, $submittedToken)) {
+            $this->redirect($this->generateUrl('bookmarks'));
+        }
     }
 }
