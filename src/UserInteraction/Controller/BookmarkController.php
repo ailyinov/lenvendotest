@@ -21,11 +21,10 @@ class BookmarkController extends AbstractController
             if (!$this->isCsrfTokenValid('add-bookmark', $submittedToken)) {
                 $this->redirect($this->generateUrl('bookmarks'));
             }
-            $url = $request->get('url');
-            $bookmarkData = new BookmarkData($url);
+            $bookmarkData = new BookmarkData($request->get('url'), $request->get('password', null));
             $errors =$validator->validate($bookmarkData);
             if (count($errors) == 0) {
-                $bookmarkAdd->run($url);
+                $bookmarkAdd->run($bookmarkData);
             }
         }
         return $this->render('add.html.twig', [
