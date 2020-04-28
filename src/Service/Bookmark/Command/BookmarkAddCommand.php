@@ -6,6 +6,8 @@ namespace Lenvendo\Service\Bookmark\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Lenvendo\Entity\Bookmark;
+use Lenvendo\Service\Bookmark\HttpClient;
+use Lenvendo\Service\Bookmark\ResponseParser;
 use Lenvendo\UserInteraction\Dto\AddBookmarkDto;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -61,6 +63,7 @@ class BookmarkAddCommand
         if ($bookmarkData->getPassword()) {
             $bookmark->setPassword($this->encoder->encodePassword($bookmark, $bookmarkData->getPassword()));
         }
+        $bookmark->setDateCreated(new \DateTime());
 
         $this->entityManager->persist($bookmark);
         $this->entityManager->flush();
