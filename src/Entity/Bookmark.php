@@ -3,6 +3,7 @@
 namespace Lenvendo\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Bookmark
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="bookmark", uniqueConstraints={@ORM\UniqueConstraint(name="bookmark_url_uindex", columns={"url"})})
  * @ORM\Entity
  */
-class Bookmark
+class Bookmark implements UserInterface
 {
     /**
      * @var int
@@ -176,5 +177,25 @@ class Bookmark
         $this->password = $password;
 
         return $this;
+    }
+
+    public function getRoles()
+    {
+        return ['bookmark_owner'];
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function getUsername()
+    {
+        return 'user';
+    }
+
+    public function eraseCredentials()
+    {
+        $this->setPassword(null);
     }
 }

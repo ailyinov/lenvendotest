@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Lenvendo\UserInteraction\RequestData;
+namespace Lenvendo\UserInteraction\Dto;
 
 
 use Symfony\Component\HttpFoundation\Request;
 
-class BookmarkData implements RequestData
+class AddBookmarkDto implements Dto
 {
     /**
      * @var string

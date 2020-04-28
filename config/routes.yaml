@@ -8,6 +8,11 @@ bookmark_add:
     controller: Lenvendo\UserInteraction\Controller\BookmarkController::addAction
     methods: GET|POST
 
+bookmark_remove:
+    path: /remove/{bookmark_id}
+    controller: Lenvendo\UserInteraction\Controller\BookmarkController::removeAction
+    methods: GET|POST
+
 bookmark_item:
     path: /bookmark/{bookmark_id}
     controller: Lenvendo\UserInteraction\Controller\BookmarkController::itemAction

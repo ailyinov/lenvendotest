@@ -1,4 +1,4 @@
-Lenvendo\UserInteraction\RequestData\BookmarkData:
+Lenvendo\UserInteraction\RequestData\AddBookmarkDtp:
     properties:
         url:
           - Url:
@@ -6,3 +6,11 @@ Lenvendo\UserInteraction\RequestData\BookmarkData:
           - NotBlank: ~
           - Lenvendo\UserInteraction\Validator\Constraint\BookmarkUniqueUrl: ~
           - Lenvendo\UserInteraction\Validator\Constraint\BookmarkValidResource: ~
+
+Lenvendo\UserInteraction\RequestData\RemoveBookmarkDto:
+    properties:
+        password:
+          - NotBlank: ~
+          - Symfony\Component\Security\Core\Validator\Constraints\UserPassword: ~
+        id:
+          - NotBlank: ~
