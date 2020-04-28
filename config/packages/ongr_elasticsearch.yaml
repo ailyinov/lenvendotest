@@ -1,0 +1,17 @@
+ongr_elasticsearch:
+  analysis:
+    filter:
+      edge_ngram_filter:
+        type: edge_ngram
+        min_gram: 1
+        max_gram: 20
+    analyzer:
+      eNgramAnalyzer:
+        type: custom
+        tokenizer: standard
+        filter:
+          - lowercase
+          - edge_ngram_filter
+  indexes:
+    Lenvendo\Document\BookmarkElastic:
+      hosts: [localhost:9209]
