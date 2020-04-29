@@ -1,9 +1,23 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-    <form action="{{ path('bookmark_add') }}" method="post">
-        <input type="text" name="url" id="url"/>
-        <input type="hidden" name="token" value="{{ csrf_token('add-bookmark') }}"/>
-        <input type="submit" value="Add"/>
-    </form>
+<form action="{{ path('bookmark_add') }}" method="post">
+    <input type="hidden" name="token" value="{{ csrf_token('add-bookmark') }}"/>
+    {% for error in errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error.getMessage() }}
+        </div>
+    {% endfor %}
+    <div class="form-group">
+        <label for="url">Url</label>
+        <input type="url" class="form-control" name="url" id="url" aria-describedby="urlHelp" required="required">
+        <small id="urlHelp" class="form-text text-muted">Enter website url.</small>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" name="password" id="password" aria-describedby="passwordHelp">
+        <small id="passwordHelp" class="form-text text-muted">Password for remove bookmark.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
 {% endblock %}

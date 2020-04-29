@@ -1,4 +1,4 @@
-Lenvendo\UserInteraction\RequestData\AddBookmarkDtp:
+Lenvendo\UserInteraction\Dto\AddBookmarkDto:
     properties:
         url:
           - Url:
@@ -7,7 +7,7 @@ Lenvendo\UserInteraction\RequestData\AddBookmarkDtp:
           - Lenvendo\UserInteraction\Validator\Constraint\BookmarkUniqueUrl: ~
           - Lenvendo\UserInteraction\Validator\Constraint\BookmarkValidResource: ~
 
-Lenvendo\UserInteraction\RequestData\RemoveBookmarkDto:
+Lenvendo\UserInteraction\Dto\RemoveBookmarkDto:
     properties:
         password:
           - NotBlank: ~

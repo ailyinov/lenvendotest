@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PaginatorWIthSorting
 {
-    private const ITEMS_PER_PAGE = 1;
+    private const ITEMS_PER_PAGE = 2;
 
     /**
      * @var int

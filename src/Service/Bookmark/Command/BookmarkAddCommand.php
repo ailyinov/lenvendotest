@@ -59,13 +59,15 @@ class BookmarkAddCommand
         $this->container = $container;
     }
 
-    public function run(AddBookmarkDto $bookmarkData)
+    public function run(AddBookmarkDto $bookmarkData): Bookmark
     {
         $bodyContent = $this->httpClient->request($bookmarkData->getUrl());
         $metadata = $this->responseParser->parseMeta($bodyContent);
 
         $bookmark = $this->persistToMysql($bookmarkData, $metadata);
         $this->persistToElastic($bookmark);
+
+        return $bookmark;
     }
 
     /**

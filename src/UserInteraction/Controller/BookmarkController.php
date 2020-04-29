@@ -12,6 +12,7 @@ use Lenvendo\UserInteraction\Dto\AddBookmarkDto;
 use Lenvendo\UserInteraction\Dto\RemoveBookmarkDto;
 use Lenvendo\UserInteraction\Utils\PaginatorWIthSorting;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -19,15 +20,19 @@ class BookmarkController extends AbstractController
 {
     public function addAction(Request $request, BookmarkAddCommand $bookmarkAdd, ValidatorInterface $validator, AddBookmarkDto $bookmarkData = null)
     {
+        $errors = [];
         if ($request->isMethod('post')) {
             $this->validateCsrfToken('add-bookmark', $request->request->get('token'));
             $errors =$validator->validate($bookmarkData);
             if (count($errors) == 0) {
-                $bookmarkAdd->run($bookmarkData);
+                $bookmark = $bookmarkAdd->run($bookmarkData);
+
+                return $this->redirect($this->generateUrl('bookmark_item', ['bookmark_id' => $bookmark->getId()]));
             }
         }
+
         return $this->render('add.html.twig', [
-            'sup' => 'sup',
+            'errors' => $errors,
         ]);
     }
 
@@ -40,6 +45,7 @@ class BookmarkController extends AbstractController
                 $remove($removeBookmarkDto);
             }
         }
+
         return $this->render('add.html.twig', [
             'sup' => 'sup',
         ]);
@@ -71,11 +77,14 @@ class BookmarkController extends AbstractController
     /**
      * @param string $id
      * @param string $submittedToken
+     * @return RedirectResponse
      */
-    private function validateCsrfToken(string $id, string $submittedToken): void
+    private function validateCsrfToken(string $id, string $submittedToken): ?RedirectResponse
     {
         if (!$this->isCsrfTokenValid($id, $submittedToken)) {
-            $this->redirect($this->generateUrl('bookmarks'));
+            return $this->redirect($this->generateUrl('bookmarks'));
         }
+
+        return null;
     }
 }
