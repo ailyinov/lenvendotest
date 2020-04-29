@@ -31,6 +31,11 @@ class PaginatorWIthSorting
     private $order ='asc';
 
     /**
+     * @var string|null
+     */
+    private $search;
+
+    /**
      * @var \IteratorAggregate
      */
     private $items;
@@ -45,10 +50,12 @@ class PaginatorWIthSorting
         $page = $request->get('page', 1);
         $sort = $request->get('sort', 'dateCreated');
         $order = $request->get('order', 'asc');
+        $search = $request->get('search', null);
 
         $this->setPage(max(1, $page));
         $this->setSortField($sort);
         $this->setOrder($order);
+        $this->setSearch($search);
     }
 
     /**
@@ -161,5 +168,21 @@ class PaginatorWIthSorting
     public function setItems(\IteratorAggregate $items): void
     {
         $this->items = $items;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSearch(): ?string
+    {
+        return $this->search;
+    }
+
+    /**
+     * @param string|null $search
+     */
+    public function setSearch(?string $search): void
+    {
+        $this->search = $search;
     }
 }

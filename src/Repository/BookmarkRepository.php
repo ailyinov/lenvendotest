@@ -14,12 +14,17 @@ class BookmarkRepository extends ServiceEntityRepository
         parent::__construct($registry, Bookmark::class);
     }
 
-    public function findSorted(int $count, int $offset, string $orderBy, string $sortOrder = 'asc'): Paginator
+    public function findSorted(int $count, int $offset, string $orderBy, string $sortOrder = 'asc', array $bookmarkIds = null): Paginator
     {
-        $dql = "SELECT b FROM {$this->getClassName()} b ORDER BY b.$orderBy $sortOrder";
-        $query = $this->getEntityManager()->createQuery($dql)
+        $query = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->orderBy($orderBy, $sortOrder)
             ->setFirstResult($offset)
-            ->setMaxResults($count);
+            ->setMaxResults($count)
+        ;
+        if (null !== $bookmarkIds) {
+            $query->andWhere("id IN ($bookmarkIds)");
+        }
 
         return new Paginator($query);
     }

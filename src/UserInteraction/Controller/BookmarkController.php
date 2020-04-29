@@ -4,18 +4,13 @@
 namespace Lenvendo\UserInteraction\Controller;
 
 
-use Elasticsearch\ClientBuilder;
-use Lenvendo\Document\BookmarkElastic;
-use Lenvendo\Entity\Bookmark;
 use Lenvendo\Repository\BookmarkRepository;
 use Lenvendo\Service\Bookmark\Command\BookmarkAddCommand;
 use Lenvendo\Service\Bookmark\Command\BookmarkRemoveCommand;
+use Lenvendo\Service\Bookmark\Query\GetPaginatedBookmarksQuery;
 use Lenvendo\UserInteraction\Dto\AddBookmarkDto;
 use Lenvendo\UserInteraction\Dto\RemoveBookmarkDto;
 use Lenvendo\UserInteraction\Utils\PaginatorWIthSorting;
-use ONGR\ElasticsearchBundle\Service\IndexService;
-use ONGR\ElasticsearchDSL\Query\FullText\MultiMatchQuery;
-use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -36,7 +31,7 @@ class BookmarkController extends AbstractController
         ]);
     }
 
-    public function removeAction(Request $request, ValidatorInterface $validator, BookmarkRemoveCommand $remove, RemoveBookmarkDto $removeBookmarkDto)
+    public function removeAction(Request $request, ValidatorInterface $validator, BookmarkRemoveCommand $remove, RemoveBookmarkDto $removeBookmarkDto = null)
     {
         if ($request->isMethod('post')) {
             $this->validateCsrfToken('remove-bookmark', $request->request->get('token'));
@@ -50,38 +45,11 @@ class BookmarkController extends AbstractController
         ]);
     }
 
-    public function listAction(Request $request, BookmarkRepository $bookmarkRepository, ContainerInterface $container)
+    public function listAction(Request $request, GetPaginatedBookmarksQuery $getPaginatedBookmarksQuery)
     {
-        /** @var Bookmark $bookmark */
-        $bookmark = $bookmarkRepository->findOneBy(['id' => 1]);
-        $bi = new BookmarkElastic();
-        $bi->setKeywords($bookmark->getKeywords());
-        $bi->setMySqlId($bookmark->getId());
-        $bi->setDescription($bookmark->getDescription());
-        $bi->setTitle($bookmark->getTitle());
-        $bi->setUrl($bookmark->getUrl());
-
         $paginator = new PaginatorWIthSorting($request);
 
-        /** @var IndexService $manager */
-        $manager = $container->get(BookmarkElastic::class);
-
-//        $manager->persist($bi);
-//        $manager->flush();
-
-        $multiMatchQuery = new MultiMatchQuery(
-            ['title', 'url', 'keywords', 'description'],
-            'trips'
-        );
-        $search = $manager->createSearch()->addQuery($multiMatchQuery);
-        $client =ClientBuilder::create()->setHosts(['localhost:9209'])->build();
-        $searchParams = [
-            'index' => 'bookmarks',
-            'body' => $search->toArray(),
-        ];
-        $res =$client->search($searchParams);
-
-        $result = $bookmarkRepository->findSorted($paginator->getItemsPerPageCount(), $paginator->getOffset(), $paginator->getSortField(), $paginator->getOrder());
+        $result = $getPaginatedBookmarksQuery->run($paginator->getItemsPerPageCount(), $paginator->getOffset(), $paginator->getOrder(), $paginator->getOrder(), $paginator->getSearch());
         $paginator->setItemsCount($result->count());
         $paginator->setItems($result);
 
