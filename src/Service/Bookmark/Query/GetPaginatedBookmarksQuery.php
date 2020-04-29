@@ -68,7 +68,7 @@ class GetPaginatedBookmarksQuery
      * @param array $bookmarkIds
      * @return Paginator
      */
-    private function getPaginator(int $count, int $offset, string $orderBy, string $sortOrder, array $bookmarkIds): Paginator
+    private function getPaginator(int $count, int $offset, string $orderBy, string $sortOrder, ?array $bookmarkIds): Paginator
     {
         return $this->bookmarkRepository->findSorted($count, $offset, $orderBy, $sortOrder, $bookmarkIds);
     }

@@ -18,12 +18,14 @@ class BookmarkRepository extends ServiceEntityRepository
     {
         $query = $this->getEntityManager()
             ->createQueryBuilder()
-            ->orderBy($orderBy, $sortOrder)
+            ->select('b')
+            ->from($this->getClassName(), 'b')
+            ->orderBy("b.$orderBy", $sortOrder)
             ->setFirstResult($offset)
             ->setMaxResults($count)
         ;
         if (null !== $bookmarkIds) {
-            $query->andWhere("id IN ($bookmarkIds)");
+            $query->andWhere("b.id IN ($bookmarkIds)");
         }
 
         return new Paginator($query);

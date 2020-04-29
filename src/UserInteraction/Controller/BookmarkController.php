@@ -49,7 +49,7 @@ class BookmarkController extends AbstractController
     {
         $paginator = new PaginatorWIthSorting($request);
 
-        $result = $getPaginatedBookmarksQuery->run($paginator->getItemsPerPageCount(), $paginator->getOffset(), $paginator->getOrder(), $paginator->getOrder(), $paginator->getSearch());
+        $result = $getPaginatedBookmarksQuery->run($paginator->getItemsPerPageCount(), $paginator->getOffset(), $paginator->getSortField(), $paginator->getOrder(), $paginator->getSearch());
         $paginator->setItemsCount($result->count());
         $paginator->setItems($result);
 
