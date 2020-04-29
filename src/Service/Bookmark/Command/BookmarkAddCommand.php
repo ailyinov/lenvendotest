@@ -68,6 +68,11 @@ class BookmarkAddCommand
         $this->persistToElastic($bookmark);
     }
 
+    /**
+     * No failproof here for demo purpose
+     *
+     * @param Bookmark $bookmark
+     */
     private function persistToElastic(Bookmark $bookmark): void
     {
         $bi = new BookmarkElastic();
