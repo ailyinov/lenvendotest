@@ -46,7 +46,7 @@ class BookmarkController extends AbstractController
             }
         }
 
-        return $this->render('add.html.twig', [
+        return $this->render('remove.html.twig', [
             'sup' => 'sup',
         ]);
     }

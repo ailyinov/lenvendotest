@@ -1,15 +1,14 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-    <ul>
-        <li>{{ bookmark.title }}</li>
-        <li>{{ bookmark.url }}</li>
-        <li>{{ bookmark.description }}</li>
-        <li>{{ bookmark.keywords }}</li>
-        <li>{{ bookmark.favicon }}</li>
-        <li>{{ bookmark.dateCreated.format('Y-m-d H:i:s') }}</li>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{ bookmark.title|e }}</li>
+        <li class="list-group-item">{{ bookmark.favicon|e }}</li>
+        <li class="list-group-item">{{ bookmark.url|e }}</li>
+        <li class="list-group-item">{{ bookmark.description|e }}</li>
+        <li class="list-group-item">{{ bookmark.keywords|e }}</li>
+        <li class="list-group-item">{{ bookmark.dateCreated.format('Y-m-d H:i:s') }}</li>
     </ul>
-    <form action="{{ path('bookmark_item', {bookmark_id: bookmark.id}) }}" method="delete">
-        <input type="submit" value="Remove"/>
-    </form>
+    <a href="{{ path('bookmark_remove', {bookmark_id: bookmark.id}) }}" class="btn btn-danger">Remove</a>
+    <a href="{{ path('bookmarks') }}" class="btn btn-info">Back to list</a>
 {% endblock %}

@@ -28,7 +28,7 @@
                 {% endif %}
             </a>
         </th>
-        <th scope="col">Remove</th>
+        <th scope="col">Details</th>
     </tr>
     </thead>
     <tbody>
@@ -39,7 +39,7 @@
             <td>{{bookmark.title|e}}</td>
             <td>{{ bookmark.url }}</td>
             <td>{{ bookmark.dateCreated().format('Y-m-d H:i:s') }}</td>
-            <td><a class="page-link" href="{{ path('bookmark_remove', {bookmark_id: bookmark.id}) }}"> >> </a></td>
+            <td><a class="page-link" href="{{ path('bookmark_item', {bookmark_id: bookmark.id}) }}"> >> </a></td>
         </tr>
     {% endfor %}
     </tbody>
