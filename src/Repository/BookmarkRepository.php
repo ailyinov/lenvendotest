@@ -25,7 +25,7 @@ class BookmarkRepository extends ServiceEntityRepository
             ->setMaxResults($count)
         ;
         if (null !== $bookmarkIds) {
-            $query->andWhere("b.id IN ($bookmarkIds)");
+            $query->andWhere("b.id IN (:bookmarkIds)")->setParameter('bookmarkIds', $bookmarkIds);
         }
 
         return new Paginator($query);
