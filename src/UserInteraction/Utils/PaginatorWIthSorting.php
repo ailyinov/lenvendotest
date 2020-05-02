@@ -140,17 +140,18 @@ class PaginatorWIthSorting
         return $count < 1 ? 1 : $count;
     }
 
-    public function getQuery(int $page = null, string $sort = null, string $order = null): string
+    public function getQuery(?int $page = null, ?string $sort = null, ?string $order = null): string
     {
         return http_build_query($this->getQueryParams($page, $sort, $order));
     }
 
-    public function getQueryParams(int $page = null, string $sort = null, string $order = null): array
+    public function getQueryParams(?int $page = null, ?string $sort = null, ?string $order = null, ?string $search = null): array
     {
         return [
             'page' => $page ?? $this->getPage(),
             'sort' => $sort ?? $this->getSortField(),
             'order' => $order ?? $this->getOrder(),
+            'search' => $search ?? $this->getSearch(),
         ];
     }
 
