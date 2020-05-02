@@ -34,7 +34,7 @@ class ResponseParser
     {
         $nodes = $doc->getElementsByTagName('title');
         $title = $nodes->item(0)->nodeValue;
-        $result['title'] = $title;
+        $result['title'] = trim($title);
     }
 
     /**
@@ -44,8 +44,15 @@ class ResponseParser
     private function getFavicon(DOMDocument $doc, array &$result): void
     {
         $xml = simplexml_import_dom($doc);
-        $arr = $xml->xpath('//link[@rel="shortcut icon"]');
-        $result['favicon'] = $arr[0]['href'] ?? '';
+        $arr = $xml->xpath('//link[@rel="shortcut icon" or @rel="icon"]');
+        $link = $arr[0]['href'] ?? '';
+        if ($link) {
+            $scheme = parse_url($link, PHP_URL_SCHEME);
+            if (empty($scheme)) {
+                $link = 'http://' . ltrim($link, '/');
+            }
+            $result['favicon'] = $link;
+        }
     }
 
     /**
@@ -60,7 +67,7 @@ class ResponseParser
             $meta = $metas->item($i);
             $attribute = $meta->getAttribute('name');
             if (in_array($attribute, [self::META_DESCRIPTION, self::META_KEYWORDS])) {
-                $result[$attribute] = $meta->getAttribute('content');
+                $result[$attribute] = trim($meta->getAttribute('content'));
             }
         }
     }
