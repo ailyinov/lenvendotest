@@ -55,7 +55,7 @@ class PaginatorWIthSorting
         $this->setPage(max(1, $page));
         $this->setSortField($sort);
         $this->setOrder($order);
-        $this->setSearch($search);
+        $this->setSearch($search ?: null);
     }
 
     /**

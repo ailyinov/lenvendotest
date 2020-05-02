@@ -2,16 +2,19 @@
 
 {% block content %}
 
-<form action="{{ path('bookmarks', paginator.getQueryParams(null, null, null, paginator.getSearch())) }}" method="get">
+<form action="{{ path('bookmarks', paginator.getQueryParams(null ,null, null, paginator.getSearch)) }}" method="get">
     <div class="form-row align-items-center">
         <div class="col-auto">
             <label for="search" class="sr-only">Search</label>
-            <input class="form-control form-control mb-2" type="text" name="search" id="search" placeholder="Search">
+            <input class="form-control form-control mb-2" type="text" name="search" id="search" placeholder="Search" value="{{ paginator.getSearch }}">
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary mb-2">Search</button>
         </div>
     </div>
+    <input type="hidden" name="page" value="{{ 1 }}">
+    <input type="hidden" name="sort" value="{{ paginator.getSortField }}">
+    <input type="hidden" name="order" value="{{ paginator.getOrder }}">
 </form>
 <table class="table table-striped">
     <thead class="thead-dark">
@@ -33,7 +36,7 @@
             </a>
         </th>
         <th scope="col">
-            <a href="?{{ path('bookmarks', paginator.getQueryParams(null, 'dateCreated', paginator.toggleOrder)) }}">Created
+            <a href="{{ path('bookmarks', paginator.getQueryParams(null, 'dateCreated', paginator.toggleOrder)) }}">Created
                 {% if paginator.getSortField() == 'dateCreated' %}
                     {% include 'sort-order.html.twig' with { 'paginator' : paginator } %}
                 {% endif %}

@@ -40,7 +40,7 @@ class GetPaginatedBookmarksQuery
         return $this->getPaginator($count, $offset, $orderBy, $sortOrder, $bookmarkIds);
     }
 
-    private function findBySearch(string $query): array
+    private function findBySearch(string $query): ?array
     {
         /** @var IndexService $indexService */
         $indexService = $this->container->get(BookmarkElastic::class);
@@ -55,9 +55,13 @@ class GetPaginatedBookmarksQuery
             'index' => 'bookmarks',
             'body' => $search->toArray(),
         ];
-        $result =$client->search($searchParams);
+        $result = $client->search($searchParams);
+        $bookmarkIds = [];
+        foreach ($result['hits']['hits'] as $item) {
+            $bookmarkIds[] = $item['_source']['my_sql_id'];
+        }
 
-        return [];
+        return $bookmarkIds;
     }
 
     /**
