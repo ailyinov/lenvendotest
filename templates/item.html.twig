@@ -1,14 +1,14 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">{{ bookmark.title|e }}</li>
-        <li class="list-group-item">{{ bookmark.favicon|e }}</li>
-        <li class="list-group-item">{{ bookmark.url|e }}</li>
-        <li class="list-group-item">{{ bookmark.description|e }}</li>
-        <li class="list-group-item">{{ bookmark.keywords|e }}</li>
-        <li class="list-group-item">{{ bookmark.dateCreated.format('Y-m-d H:i:s') }}</li>
-    </ul>
-    <a href="{{ path('bookmark_remove', {bookmark_id: bookmark.id}) }}" class="btn btn-danger">Remove</a>
-    <a href="{{ path('bookmarks') }}" class="btn btn-info">Back to list</a>
+    <div class="jumbotron">
+        <h1 class="display-4">{{ bookmark.title|e }}</h1>
+        <p class="lead"><img class="rounded-sm" src="{{ bookmark.favicon }}" /> {{ bookmark.url|e }}</p>
+        <hr class="my-4">
+        <p>{{ bookmark.description|e }}</p>
+        <p><b>Keywords:</b>{{ bookmark.keywords|e }}</p>
+        <p><b>Added: </b>{{ bookmark.dateCreated.format('Y-m-d H:i:s') }}</p>
+        <a href="{{ path('bookmark_remove', {bookmark_id: bookmark.id}) }}" class="btn btn-danger">Remove</a>
+        <a href="{{ path('bookmarks') }}" class="btn btn-info">Back to list</a>
+    </div>
 {% endblock %}
