@@ -1,7 +1,18 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-<a class="btn btn-primary" href="{{ path('bookmark_add') }}">Add bookmark</a>
+
+<form action="{{ path('bookmarks', paginator.getQueryParams(null, null, null, paginator.getSearch())) }}" method="get">
+    <div class="form-row align-items-center">
+        <div class="col-auto">
+            <label for="search" class="sr-only">Search</label>
+            <input class="form-control form-control mb-2" type="text" name="search" id="search" placeholder="Search">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-2">Search</button>
+        </div>
+    </div>
+</form>
 <table class="table table-striped">
     <thead class="thead-dark">
     <tr>
@@ -50,5 +61,6 @@
             <li class="page-item {% if i == paginator.getPage() %} active {% endif %}"><a class="page-link" href="{{ path('bookmarks', paginator.getQueryParams(i)) }}">{{i}}</a></li>
         {% endfor %}
     </ul>
+    <a class="btn btn-primary" href="{{ path('bookmark_add') }}">Add bookmark</a>
 </nav>
 {% endblock %}
