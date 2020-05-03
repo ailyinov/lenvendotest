@@ -33,6 +33,9 @@ class BookmarkRepository extends ServiceEntityRepository
 
     public function findOneByUrl(string $url): ?Bookmark
     {
-        return $this->findOneBy(['url' => $url]);
+        /** @var Bookmark $bookmark */
+        $bookmark = $this->findOneBy(['url' => $url]);
+
+        return $bookmark;
     }
 }

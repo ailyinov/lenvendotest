@@ -71,7 +71,7 @@ class BookmarkAddCommand
     }
 
     /**
-     * No failproof here for demo purpose
+     * No failproof here demo purpose only
      *
      * @param Bookmark $bookmark
      */
