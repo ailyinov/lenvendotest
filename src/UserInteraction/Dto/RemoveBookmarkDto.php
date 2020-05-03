@@ -40,7 +40,7 @@ class RemoveBookmarkDto implements Dto
 
     public static function createFromRequest(Request $request)
     {
-        return new self($request->get('id'), $request->get('password'));
+        return new self($request->get('bookmark_id'), $request->get('password'));
     }
 
     /**

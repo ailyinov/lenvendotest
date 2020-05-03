@@ -8,9 +8,10 @@ Lenvendo\UserInteraction\Dto\AddBookmarkDto:
           - Lenvendo\UserInteraction\Validator\Constraint\BookmarkValidResource: ~
 
 Lenvendo\UserInteraction\Dto\RemoveBookmarkDto:
+  constraints:
+    - Lenvendo\UserInteraction\Validator\Constraint\BookmarkPassword: ~
     properties:
         password:
           - NotBlank: ~
-          - Symfony\Component\Security\Core\Validator\Constraints\UserPassword: ~
         id:
           - NotBlank: ~

@@ -4,6 +4,8 @@
 namespace Lenvendo\UserInteraction\Controller;
 
 
+use GuzzleHttp\TransferStats;
+use Lenvendo\Entity\Bookmark;
 use Lenvendo\Repository\BookmarkRepository;
 use Lenvendo\Service\Bookmark\Command\BookmarkAddCommand;
 use Lenvendo\Service\Bookmark\Command\BookmarkRemoveCommand;
@@ -36,18 +38,26 @@ class BookmarkController extends AbstractController
         ]);
     }
 
-    public function removeAction(Request $request, ValidatorInterface $validator, BookmarkRemoveCommand $remove, RemoveBookmarkDto $removeBookmarkDto = null)
+    public function removeAction(
+        Request $request,
+        ValidatorInterface $validator,
+        BookmarkRemoveCommand $removeCommand,
+        BookmarkRepository $bookmarkRepository,
+        RemoveBookmarkDto $removeBookmarkDto = null)
     {
+        $errors = [];
+        $bookmark = $bookmarkRepository->find($request->get('bookmark_id'));
         if ($request->isMethod('post')) {
             $this->validateCsrfToken('remove-bookmark', $request->request->get('token'));
-            $errors =$validator->validate($removeBookmarkDto);
+            $errors = $validator->validate($removeBookmarkDto);
             if (count($errors) == 0) {
-                $remove($removeBookmarkDto);
+                $removeCommand($removeBookmarkDto);
             }
         }
 
         return $this->render('remove.html.twig', [
-            'sup' => 'sup',
+            'errors' => $errors,
+            'bookmark' => $bookmark,
         ]);
     }
 
@@ -67,6 +77,7 @@ class BookmarkController extends AbstractController
     public function itemAction(Request $request, BookmarkRepository $bookmarkRepository)
     {
         $bookmarkId = $request->get('bookmark_id');
+        /** @var Bookmark $bookmark */
         $bookmark = $bookmarkRepository->find($bookmarkId);
 
         return $this->render('item.html.twig', [
