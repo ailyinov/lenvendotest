@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     images_path: '%kernel.project_dir%/public/img/'
+    elasticsearch_host: '%env(resolve:ELASTICSEARCH_HOST)%'
 
 services:
     # default configuration for services in *this* file
@@ -36,3 +37,7 @@ services:
 
     Lenvendo\Service\Bookmark\ResponseParser:
         arguments: ['%images_path%']
+
+    Elasticsearch\Client:
+        factory: ['@Lenvendo\Elasticsearch\ClientFactory', 'create']
+        arguments: ['%elasticsearch_host%']

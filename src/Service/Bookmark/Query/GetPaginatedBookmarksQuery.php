@@ -5,7 +5,7 @@ namespace Lenvendo\Service\Bookmark\Query;
 
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Elasticsearch\ClientBuilder;
+use Elasticsearch\Client as ElasticsearchClient;
 use Lenvendo\Document\BookmarkElastic;
 use Lenvendo\Repository\BookmarkRepository;
 use ONGR\ElasticsearchBundle\Service\IndexService;
@@ -24,10 +24,23 @@ class GetPaginatedBookmarksQuery
      */
     private $bookmarkRepository;
 
-    public function __construct(ContainerInterface $container, BookmarkRepository $bookmarkRepository)
+    /**
+     * @var ElasticsearchClient
+     */
+    private $elasticsearchClient;
+
+    /**
+     * GetPaginatedBookmarksQuery constructor.
+     *
+     * @param ContainerInterface $container
+     * @param BookmarkRepository $bookmarkRepository
+     * @param ElasticsearchClient $elasticsearchClient
+     */
+    public function __construct(ContainerInterface $container, BookmarkRepository $bookmarkRepository, ElasticsearchClient $elasticsearchClient)
     {
         $this->container = $container;
         $this->bookmarkRepository = $bookmarkRepository;
+        $this->elasticsearchClient = $elasticsearchClient;
     }
 
     public function run(int $count, int $offset, string $orderBy, string $sortOrder = 'asc', string $search = null): Paginator
@@ -50,12 +63,11 @@ class GetPaginatedBookmarksQuery
             $query
         );
         $search = $indexService->createSearch()->addQuery($multiMatchQuery);
-        $client =ClientBuilder::create()->setHosts(['localhost:9209'])->build();
         $searchParams = [
             'index' => 'bookmarks',
             'body' => $search->toArray(),
         ];
-        $result = $client->search($searchParams);
+        $result = $this->elasticsearchClient->search($searchParams);
         $bookmarkIds = [];
         foreach ($result['hits']['hits'] as $item) {
             $bookmarkIds[] = $item['_source']['my_sql_id'];
