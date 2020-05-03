@@ -59,14 +59,12 @@ class BookmarkAddCommand
         $this->container = $container;
     }
 
-    public function run(AddBookmarkDto $bookmarkData): Bookmark
+    public function run(AddBookmarkDto $addBookmarkDto): Bookmark
     {
-        $bodyContent = $this->httpClient->request($bookmarkData->getUrl());
+        $urlDomain = parse_url($addBookmarkDto->getUrl(), PHP_URL_HOST);
+        $metadata = $this->responseParser->parseMeta((string) $addBookmarkDto->getResponse()->getBody(), $urlDomain);
 
-        $urlDomain = parse_url($bookmarkData->getUrl(), PHP_URL_HOST);
-        $metadata = $this->responseParser->parseMeta($bodyContent, $urlDomain);
-
-        $bookmark = $this->persistToMysql($bookmarkData, $metadata);
+        $bookmark = $this->persistToMysql($addBookmarkDto, $metadata);
         $this->persistToElastic($bookmark);
 
         return $bookmark;

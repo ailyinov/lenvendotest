@@ -4,6 +4,7 @@
 namespace Lenvendo\UserInteraction\Dto;
 
 
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class AddBookmarkDto implements Dto
@@ -17,6 +18,11 @@ class AddBookmarkDto implements Dto
      * @var string
      */
     private $password;
+
+    /**
+     * @var ResponseInterface
+     */
+    private $response;
 
     /**
      * BookmarkData constructor.
@@ -44,6 +50,22 @@ class AddBookmarkDto implements Dto
     public function getPassword(): ?string
     {
         return $this->password;
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    public function getResponse(): ResponseInterface
+    {
+        return $this->response;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     */
+    public function setResponse(ResponseInterface $response): void
+    {
+        $this->response = $response;
     }
 
     public static function createFromRequest(Request $request)

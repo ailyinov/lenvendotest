@@ -1,11 +1,12 @@
 Lenvendo\UserInteraction\Dto\AddBookmarkDto:
+    constraints:
+      - Lenvendo\UserInteraction\Validator\Constraint\BookmarkValidResource: ~
     properties:
         url:
           - Url:
               message: The url "{{ value }}" is not a valid url.
           - NotBlank: ~
           - Lenvendo\UserInteraction\Validator\Constraint\BookmarkUniqueUrl: ~
-          - Lenvendo\UserInteraction\Validator\Constraint\BookmarkValidResource: ~
 
 Lenvendo\UserInteraction\Dto\RemoveBookmarkDto:
     constraints:
