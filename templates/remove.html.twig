@@ -7,9 +7,16 @@
         </div>
     {% endfor %}
 
-    <form action="{{ path('bookmark_remove', {'bookmark_id': bookmark.id}) }}" method="post">
-        <input type="password" name="password" id="password"/>
-        <input type="hidden" name="token" value="{{ csrf_token('remove-bookmark') }}"/>
-        <input type="submit" class="btn btn-danger" value="Remove"/>
-    </form>
+    <div class="jumbotron">
+        <h1 class="display-4">{{ bookmark.title|e }}</h1>
+        <p class="lead"><img class="rounded-sm" src="{{ bookmark.favicon }}" /> {{ bookmark.url|e }}</p>
+        <hr class="my-4">
+        <form action="{{ path('bookmark_remove', {'bookmark_id': bookmark.id}) }}" method="post">
+            <input type="password" name="password" id="password"/>
+            <input type="hidden" name="token" value="{{ csrf_token('remove-bookmark') }}"/>
+            <input type="submit" class="btn btn-danger" value="Remove"/>
+            <a href="{{ path('bookmarks') }}" class="btn btn-info">Back to list</a>
+        </form>
+    </div>
+
 {% endblock %}

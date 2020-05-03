@@ -52,6 +52,8 @@ class BookmarkController extends AbstractController
             $errors = $validator->validate($removeBookmarkDto);
             if (count($errors) == 0) {
                 $removeCommand($removeBookmarkDto);
+
+                return $this->redirect($this->generateUrl('bookmarks'));
             }
         }
 
