@@ -3,7 +3,7 @@
 {% block content %}
     <div class="jumbotron">
         <h1 class="display-4">{{ bookmark.title|e }}</h1>
-        <p class="lead"><img class="rounded-sm" src="{{ asset('public/img/' ~ bookmark.getFavicon())  }}" /> {{ bookmark.url|e }}</p>
+        <p class="lead"><img class="rounded-sm" src="{{ asset('img/' ~ bookmark.getFavicon())  }}" /> {{ bookmark.url|e }}</p>
         <hr class="my-4">
         <p>{{ bookmark.description|e }}</p>
         <p><b>Keywords:</b>{{ bookmark.keywords|e }}</p>
