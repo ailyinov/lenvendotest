@@ -47,8 +47,11 @@ class ResponseParser
     private function getTitle(DOMDocument $doc, array &$result): void
     {
         $nodes = $doc->getElementsByTagName('title');
-        $title = $nodes->item(0)->nodeValue;
-        $result['title'] = trim($title);
+        $title = null;
+        if ($nodes->length > 0) {
+            $title = $nodes->item(0)->nodeValue;
+        }
+        $result['title'] = $title ? trim($title) : '';
     }
 
     /**
