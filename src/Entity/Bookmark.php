@@ -58,13 +58,6 @@ class Bookmark implements UserInterface
     private $keywords;
 
     /**
-     * @var json|null
-     *
-     * @ORM\Column(name="meta", type="json", nullable=true)
-     */
-    private $meta;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_created", type="datetime", nullable=false)
