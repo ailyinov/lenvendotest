@@ -14,4 +14,4 @@ ongr_elasticsearch:
           - edge_ngram_filter
   indexes:
     Lenvendo\Document\BookmarkElastic:
-      hosts: [localhost:9209]
+      hosts: [elasticsearch:9200]
