@@ -26,12 +26,14 @@ class BookmarkRemoveCommand
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param RemoveBookmarkDto $removeBookmarkDto
+     * @throws ORMException
+     */
     public function __invoke(RemoveBookmarkDto $removeBookmarkDto)
     {
-        try {
-            $bookmark = $this->entityManager->getReference(Bookmark::class, $removeBookmarkDto->getId());
-            $this->entityManager->remove($bookmark);
-        } catch (ORMException $e) {
-        }
+        $bookmark = $this->entityManager->getReference(Bookmark::class, $removeBookmarkDto->getId());
+        $this->entityManager->remove($bookmark);
+        $this->entityManager->flush();
     }
 }
