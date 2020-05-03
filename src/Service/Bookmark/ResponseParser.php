@@ -128,6 +128,7 @@ class ResponseParser
             return null;
         }
         $imageName = basename($link);
+        $imageName = substr($imageName, 0, strpos($imageName, '?'));
         $favicon->getBody()->rewind();
 
         if (!is_dir("{$this->imagesPath}$urlDomain")) {
