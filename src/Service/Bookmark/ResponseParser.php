@@ -3,7 +3,6 @@
 
 namespace Lenvendo\Service\Bookmark;
 
-
 use DOMDocument;
 
 class ResponseParser
@@ -12,7 +11,22 @@ class ResponseParser
 
     const META_KEYWORDS = 'keywords';
 
-    public function parseMeta(string $content): array
+    /**
+     * @var string
+     */
+    private $imagesPath;
+
+    /**
+     * ResponseParser constructor.
+     *
+     * @param string $imagesPath
+     */
+    public function __construct(string $imagesPath)
+    {
+        $this->imagesPath = $imagesPath;
+    }
+
+    public function parseMeta(string $content, string $urlDomain): array
     {
         $doc = new DOMDocument();
         $doc->strictErrorChecking = false;
@@ -20,7 +34,7 @@ class ResponseParser
         $result = [];
 
         $this->getTitle($doc, $result);
-        $this->getFavicon($doc, $result);
+        $this->getFavicon($doc, $urlDomain, $result);
         $this->getMeta($doc, $result);
 
         return $result;
@@ -39,19 +53,32 @@ class ResponseParser
 
     /**
      * @param DOMDocument $doc
+     * @param string $urlDomain
      * @param array $result
      */
-    private function getFavicon(DOMDocument $doc, array &$result): void
+    private function getFavicon(DOMDocument $doc, string $urlDomain, array &$result): void
     {
         $xml = simplexml_import_dom($doc);
-        $arr = $xml->xpath('//link[@rel="shortcut icon" or @rel="icon"]');
-        $link = $arr[0]['href'] ?? '';
+        $icons = $xml->xpath('//link[@rel="shortcut icon" or @rel="icon"]');
+        $link = null;
+        /** @var \SimpleXMLElement $icon */
+        foreach ($icons as $icon) {
+            $link = $icon[0]['href'];
+            if ($link) {
+                break;
+            }
+        }
         if ($link) {
             $scheme = parse_url($link, PHP_URL_SCHEME);
             if (empty($scheme)) {
                 $link = 'http://' . ltrim($link, '/');
             }
-            $result['favicon'] = $link;
+
+            $favicon = $this->faviconRequest($link);
+            $imagePath = $this->storeFavicon($favicon, $link, $urlDomain);
+            if ($imagePath) {
+                $result['favicon'] = $imagePath;
+            }
         }
     }
 
@@ -70,5 +97,44 @@ class ResponseParser
                 $result[$attribute] = trim($meta->getAttribute('content'));
             }
         }
+    }
+
+    /**
+     * @param $link
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    private function faviconRequest(string $link): \Psr\Http\Message\ResponseInterface
+    {
+        $client = new \GuzzleHttp\Client();
+        $favicon = $client->request('GET', $link);
+
+        return $favicon;
+    }
+
+    /**
+     * @param \Psr\Http\Message\ResponseInterface $favicon
+     * @param $link
+     * @param string $urlDomain
+     * @return string|null
+     */
+    private function storeFavicon(\Psr\Http\Message\ResponseInterface $favicon, $link, string $urlDomain): ?string
+    {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $iconType = finfo_buffer($finfo, $favicon->getBody());
+        if (!in_array($iconType, ['image/x-icon', 'image/png', 'image/jpeg'])) {
+            return null;
+        }
+        $imageName = basename($link);
+        $favicon->getBody()->rewind();
+
+        if (!is_dir("{$this->imagesPath}$urlDomain")) {
+            mkdir("{$this->imagesPath}$urlDomain", 0777);
+        }
+        $fileStored = file_put_contents("{$this->imagesPath}$urlDomain/{$imageName}", $favicon->getBody());
+        if ($fileStored) {
+            return "$urlDomain/{$imageName}";
+        }
+
+        return null;
     }
 }

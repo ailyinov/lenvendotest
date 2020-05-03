@@ -49,7 +49,7 @@
     {% for bookmark in paginator.getItems() %}
         <tr>
             <th scope="row">{{bookmark.id}}</th>
-            <td>{{bookmark.favicon|e}}</td>
+            <td><img class="rounded-sm" src="{{ asset('public/img/' ~ bookmark.getFavicon())  }}" /></td>
             <td>{{bookmark.title|e}}</td>
             <td>{{ bookmark.url }}</td>
             <td>{{ bookmark.dateCreated().format('Y-m-d H:i:s') }}</td>
