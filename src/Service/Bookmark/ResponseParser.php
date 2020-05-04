@@ -127,8 +127,7 @@ class ResponseParser
         if (!in_array($iconType, ['image/x-icon', 'image/png', 'image/jpeg'])) {
             return null;
         }
-        $imageName = basename($link);
-        $imageName = substr($imageName, 0, strpos($imageName, '?'));
+        $imageName = parse_url(basename($link), PHP_URL_PATH);
         $favicon->getBody()->rewind();
 
         if (!is_dir("{$this->imagesPath}$urlDomain")) {
