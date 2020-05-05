@@ -61,26 +61,15 @@ class ResponseParser
      */
     private function getFavicon(DOMDocument $doc, string $urlDomain, array &$result): void
     {
-        $xml = simplexml_import_dom($doc);
-        $icons = $xml->xpath('//link[@rel="shortcut icon" or @rel="icon"]');
-        $link = null;
-        /** @var \SimpleXMLElement $icon */
-        foreach ($icons as $icon) {
-            $link = $icon[0]['href'];
-            if ($link) {
-                break;
-            }
-        }
+        $link = $this->parseDocForFavicon($doc);
         if ($link) {
-            $scheme = parse_url($link, PHP_URL_SCHEME);
-            if (empty($scheme)) {
-                $link = 'http://' . ltrim($link, '/');
-            }
-
-            $favicon = $this->faviconRequest($link);
-            $imagePath = $this->storeFavicon($favicon, $link, $urlDomain);
-            if ($imagePath) {
-                $result['favicon'] = $imagePath;
+            $url = $this->fixFaviconLink($link, $urlDomain);
+            $favicon = $this->faviconRequest($url);
+            if ($this->isFaviconValid($favicon)) {
+                $imagePath = $this->storeFavicon($favicon, $url, $urlDomain);
+                if ($imagePath) {
+                    $result['favicon'] = $imagePath;
+                }
             }
         }
     }
@@ -122,11 +111,6 @@ class ResponseParser
      */
     private function storeFavicon(\Psr\Http\Message\ResponseInterface $favicon, $link, string $urlDomain): ?string
     {
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $iconType = finfo_buffer($finfo, $favicon->getBody());
-        if (!in_array($iconType, ['image/x-icon', 'image/png', 'image/jpeg'])) {
-            return null;
-        }
         $imageName = parse_url(basename($link), PHP_URL_PATH);
         $favicon->getBody()->rewind();
 
@@ -139,5 +123,50 @@ class ResponseParser
         }
 
         return null;
+    }
+
+    private function isFaviconValid(\Psr\Http\Message\ResponseInterface $favicon): bool
+    {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $iconType = finfo_buffer($finfo, $favicon->getBody());
+
+        return in_array($iconType, ['image/x-icon', 'image/png', 'image/jpeg']);
+    }
+
+    /**
+     * @param string $link
+     * @param string $urlDomain
+     * @return string
+     */
+    private function fixFaviconLink(string $link, string $urlDomain): string
+    {
+        $urlArr = parse_url($link);
+        if (empty($urlArr['scheme'])) {
+            $urlArr['scheme'] = 'http';
+        }
+        if (empty($urlArr['host'])) {
+            $urlArr['host'] = $urlDomain;
+        }
+
+        return http_build_url($urlArr);
+    }
+
+    /**
+     * @param DOMDocument $doc
+     * @return \SimpleXMLElement|null
+     */
+    private function parseDocForFavicon(DOMDocument $doc): ?string
+    {
+        $xml = simplexml_import_dom($doc);
+        $icons = $xml->xpath('//link[@rel="shortcut icon" or @rel="icon"]');
+        $link = null;
+        /** @var \SimpleXMLElement $icon */
+        foreach ($icons as $icon) {
+            $link = $icon[0]['href'];
+            if ($link) {
+                break;
+            }
+        }
+        return $link;
     }
 }

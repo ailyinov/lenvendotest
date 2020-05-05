@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "ext-simplexml": "*",
         "doctrine/annotations": "^1.10",
+        "jakeasmith/http_build_url": "^1.0",
         "ongr/elasticsearch-bundle": "^7.0",
         "symfony/asset": "5.0.*",
         "symfony/console": "5.0.*",
