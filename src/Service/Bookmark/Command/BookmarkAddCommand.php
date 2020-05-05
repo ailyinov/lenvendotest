@@ -7,7 +7,6 @@ namespace Lenvendo\Service\Bookmark\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use Lenvendo\Document\BookmarkElastic;
 use Lenvendo\Entity\Bookmark;
-use Lenvendo\Service\Bookmark\HttpClient;
 use Lenvendo\Service\Bookmark\ResponseParser;
 use Lenvendo\UserInteraction\Dto\AddBookmarkDto;
 use ONGR\ElasticsearchBundle\Service\IndexService;
@@ -16,11 +15,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class BookmarkAddCommand
 {
-    /**
-     * @var HttpClient
-     */
-    private $httpClient;
-
     /**
      * @var ResponseParser
      */
@@ -44,15 +38,13 @@ class BookmarkAddCommand
     /**
      * BookmarkAdd constructor.
      *
-     * @param HttpClient $httpClient
      * @param ResponseParser $responseParser
      * @param EntityManagerInterface $entityManager
      * @param ContainerInterface $container
      * @param UserPasswordEncoderInterface $encoder
      */
-    public function __construct(HttpClient $httpClient, ResponseParser $responseParser, EntityManagerInterface $entityManager, ContainerInterface $container, UserPasswordEncoderInterface $encoder)
+    public function __construct(ResponseParser $responseParser, EntityManagerInterface $entityManager, ContainerInterface $container, UserPasswordEncoderInterface $encoder)
     {
-        $this->httpClient = $httpClient;
         $this->responseParser = $responseParser;
         $this->entityManager = $entityManager;
         $this->encoder = $encoder;
