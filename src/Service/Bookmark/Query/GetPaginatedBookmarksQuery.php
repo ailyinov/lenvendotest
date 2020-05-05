@@ -60,7 +60,10 @@ class GetPaginatedBookmarksQuery
 
         $multiMatchQuery = new MultiMatchQuery(
             ['title', 'url', 'keywords', 'description'],
-            $query
+            $query,
+            [
+                'type' => 'phrase_prefix',
+            ]
         );
         $search = $indexService->createSearch()->addQuery($multiMatchQuery);
         $searchParams = [
