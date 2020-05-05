@@ -56,6 +56,7 @@ services:
 
   php:
     build: docker/php
+    container_name: lenvendotest_php
     expose:
       - '8000'
     depends_on:
