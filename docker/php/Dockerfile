@@ -26,6 +26,7 @@ RUN apt-get install -my \
 
 RUN mkdir /run/php
 ADD conf/www.conf /etc/php/7.2/fpm/pool.d/www.conf
+ADD conf/xdebug.ini /etc/php/7.2/mods-available/xdebug.ini
 ADD conf/php-fpm.conf /etc/php/7.2/fpm/php-fpm.conf
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php
