@@ -66,14 +66,11 @@ class GetPaginatedBookmarksQuery
             ]
         );
         $search = $indexService->createSearch()->addQuery($multiMatchQuery);
-        $searchParams = [
-            'index' => 'bookmarks',
-            'body' => $search->toArray(),
-        ];
-        $result = $this->elasticsearchClient->search($searchParams);
+        $result =$indexService->findDocuments($search);
         $bookmarkIds = [];
-        foreach ($result['hits']['hits'] as $item) {
-            $bookmarkIds[] = $item['_source']['my_sql_id'];
+        /** @var BookmarkElastic $item */
+        foreach ($result as $item) {
+            $bookmarkIds[] = $item->getMySqlId();
         }
 
         return $bookmarkIds;
