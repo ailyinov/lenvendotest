@@ -37,4 +37,8 @@ RUN ln -snf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 
 WORKDIR /var/www/project
 EXPOSE 8000
+
+CMD ["composer", "install"]
+CMD ["bin/console", "ongr:es:index:create"]
+
 CMD ["php-fpm7.2"]

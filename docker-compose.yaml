@@ -68,9 +68,11 @@ services:
       - '8000'
     depends_on:
       - db
+      - elasticsearch
     volumes:
       - ./:/var/www/project
       - ./var/log:/var/log
+
   web:
     build: docker/nginx
     restart: always
@@ -78,7 +80,6 @@ services:
       - '81:80'
     depends_on:
       - php
-      - db
     volumes:
       - ./:/var/www/project
       - ./var/log:/var/log/nginx
