@@ -5,11 +5,9 @@ namespace Lenvendo\Service\Bookmark\Command;
 
 
 use Doctrine\ORM\EntityManagerInterface;
-use Lenvendo\Document\BookmarkElastic;
 use Lenvendo\Entity\Bookmark;
 use Lenvendo\Service\Bookmark\ResponseParser;
 use Lenvendo\UserInteraction\Dto\AddBookmarkDto;
-use ONGR\ElasticsearchBundle\Service\IndexService;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -56,31 +54,7 @@ class BookmarkAddCommand
         $urlDomain = parse_url($addBookmarkDto->getUrl(), PHP_URL_HOST);
         $metadata = $this->responseParser->parseMeta((string) $addBookmarkDto->getResponse()->getBody(), $urlDomain);
 
-        $bookmark = $this->persistToMysql($addBookmarkDto, $metadata);
-        $this->persistToElastic($bookmark);
-
-        return $bookmark;
-    }
-
-    /**
-     * No failproof here demo purpose only
-     *
-     * @param Bookmark $bookmark
-     */
-    private function persistToElastic(Bookmark $bookmark): void
-    {
-        $bi = new BookmarkElastic();
-        $bi->setKeywords($bookmark->getKeywords());
-        $bi->setMySqlId($bookmark->getId());
-        $bi->setDescription($bookmark->getDescription());
-        $bi->setTitle($bookmark->getTitle());
-        $bi->setUrl($bookmark->getUrl());
-
-        /** @var IndexService $indexService */
-        $indexService = $this->container->get(BookmarkElastic::class);
-
-        $indexService->persist($bi);
-        $indexService->flush();
+        return $this->persistToMysql($addBookmarkDto, $metadata);
     }
 
     /**

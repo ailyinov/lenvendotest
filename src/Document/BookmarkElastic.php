@@ -18,7 +18,7 @@ class BookmarkElastic
     /**
      * @ES\Property(type="integer")
      */
-    private $mySqlId;
+    private $mysqlId;
 
     /**
      * @ES\Property(type="text")
@@ -59,17 +59,17 @@ class BookmarkElastic
     /**
      * @return mixed
      */
-    public function getMySqlId()
+    public function getMysqlId()
     {
-        return $this->mySqlId;
+        return $this->mysqlId;
     }
 
     /**
-     * @param mixed $mySqlId
+     * @param mixed $mysqlId
      */
-    public function setMySqlId($mySqlId): void
+    public function setMysqlId($mysqlId): void
     {
-        $this->mySqlId = $mySqlId;
+        $this->mysqlId = $mysqlId;
     }
 
     /**

@@ -37,6 +37,7 @@ services:
       - "9209:9200"
     environment:
       - "discovery.type=single-node"
+      - "cluster.routing.allocation.disk.threshold_enabled=false"
       - "bootstrap.memory_lock=true"
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
       - "xpack.security.enabled=false"
@@ -53,6 +54,12 @@ services:
     image: tobias74/elasticsearch-head:6
     ports:
       - "9109:9100"
+
+  logstash:
+    build: docker/logstash
+    container_name: lenvendotest_logstash
+    depends_on:
+      - elasticsearch
 
   php:
     build: docker/php

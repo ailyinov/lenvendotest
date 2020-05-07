@@ -5,7 +5,6 @@ namespace Lenvendo\Service\Bookmark\Query;
 
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Elasticsearch\Client as ElasticsearchClient;
 use Lenvendo\Document\BookmarkElastic;
 use Lenvendo\Repository\BookmarkRepository;
 use ONGR\ElasticsearchBundle\Service\IndexService;
@@ -25,22 +24,15 @@ class GetPaginatedBookmarksQuery
     private $bookmarkRepository;
 
     /**
-     * @var ElasticsearchClient
-     */
-    private $elasticsearchClient;
-
-    /**
      * GetPaginatedBookmarksQuery constructor.
      *
      * @param ContainerInterface $container
      * @param BookmarkRepository $bookmarkRepository
-     * @param ElasticsearchClient $elasticsearchClient
      */
-    public function __construct(ContainerInterface $container, BookmarkRepository $bookmarkRepository, ElasticsearchClient $elasticsearchClient)
+    public function __construct(ContainerInterface $container, BookmarkRepository $bookmarkRepository)
     {
         $this->container = $container;
         $this->bookmarkRepository = $bookmarkRepository;
-        $this->elasticsearchClient = $elasticsearchClient;
     }
 
     public function run(int $count, int $offset, string $orderBy, string $sortOrder = 'asc', string $search = null): Paginator
@@ -70,7 +62,7 @@ class GetPaginatedBookmarksQuery
         $bookmarkIds = [];
         /** @var BookmarkElastic $item */
         foreach ($result as $item) {
-            $bookmarkIds[] = $item->getMySqlId();
+            $bookmarkIds[] = $item->getMysqlId();
         }
 
         return $bookmarkIds;
